@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Thương hiệu (giống toolbar / bottom nav cũ) -->
+    <color name="brand_blue">#1877F2</color>
+    <color name="brand_blue_dark">#0D5FCC</color>
+    <color name="brand_blue_deep">#0A4BB0</color>
+    <color name="brand_blue_light">#E8F1FE</color>
+
+    <color name="brand_orange">#EA580C</color>
+    <color name="brand_orange_dark">#C2410C</color>
+    <color name="brand_orange_soft">#FFF7ED</color>
+
+    <color name="success_green">#16A34A</color>
+    <color name="stat_revenue">#0D9488</color>
+    <color name="stat_expense">#DC2626</color>
+    <color name="stat_profit">#2563EB</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_title">#1E293B</color>
+
+    <color name="outline_soft">#E2E8F0</color>
+    <color name="surface">#F8FAFC</color>
+    <color name="surface_card">#FFFFFFFF</color>
+    <color name="on_surface">#1E293B</color>
+    <color name="on_surface_muted">#64748B</color>
+
+    <!-- Bảng màu chủ đề (theme) — primary / thanh trạng thái / container -->
+    <color name="theme_ocean_primary">#0D9488</color>
+    <color name="theme_ocean_dark">#0F766E</color>
+    <color name="theme_ocean_container">#CCFBF1</color>
+    <color name="theme_ocean_on_container">#134E4A</color>
+
+    <color name="theme_forest_primary">#059669</color>
+    <color name="theme_forest_dark">#047857</color>
+    <color name="theme_forest_container">#D1FAE5</color>
+    <color name="theme_forest_on_container">#064E3B</color>
+
+    <color name="theme_sunset_primary">#EA580C</color>
+    <color name="theme_sunset_dark">#C2410C</color>
+    <color name="theme_sunset_container">#FFEDD5</color>
+    <color name="theme_sunset_on_container">#9A3412</color>
+
+    <color name="theme_violet_primary">#7C3AED</color>
+    <color name="theme_violet_dark">#5B21B6</color>
+    <color name="theme_violet_container">#EDE9FE</color>
+    <color name="theme_violet_on_container">#4C1D95</color>
+
+    <color name="theme_rose_primary">#DB2777</color>
+    <color name="theme_rose_dark">#BE185D</color>
+    <color name="theme_rose_container">#FCE7F3</color>
+    <color name="theme_rose_on_container">#831843</color>
+
+    <color name="theme_slate_primary">#475569</color>
+    <color name="theme_slate_dark">#334155</color>
+    <color name="theme_slate_container">#E2E8F0</color>
+    <color name="theme_slate_on_container">#1E293B</color>
+
+    <color name="theme_amber_primary">#D97706</color>
+    <color name="theme_amber_dark">#B45309</color>
+    <color name="theme_amber_container">#FEF3C7</color>
+    <color name="theme_amber_on_container">#78350F</color>
+</resources>

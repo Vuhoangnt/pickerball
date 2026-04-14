@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Trang chủ"/>
+
+    <item
+        android:id="@+id/nav_qlsan"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Quản lý Sân"/>
+
+
+    <item
+        android:id="@+id/nav_qlkh"
+        android:title="Khách hàng"/>
+    <item
+        android:id="@+id/nav_qlnv"
+        android:title="Nhân viên"/>
+    <item
+        android:id="@+id/nav_ql_datsan_hoadon"
+        android:title="Đặt sân"/>
+    <item
+        android:id="@+id/nav_ql_dichvu"
+        android:title="Dịch Vụ"/>
+    <item
+        android:id="@+id/nav_lichsu"
+        android:title="Lịch sử"/>
+
+    <item
+        android:id="@+id/nav_setting"
+        android:title="Cài dặt - Tài khoản"/>
+
+
+    <item
+        android:id="@+id/more_logout"
+        android:title="Đăng xuất"/>
+
+</menu>

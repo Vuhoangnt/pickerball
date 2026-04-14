@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="surface">#0F172A</color>
+    <color name="surface_card">#1E293B</color>
+    <color name="on_surface">#F1F5F9</color>
+    <color name="on_surface_muted">#94A3B8</color>
+    <color name="outline_soft">#334155</color>
+    <color name="brand_blue_light">#1E3A5F</color>
+    <color name="brand_orange_soft">#2C1810</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_title">#F1F5F9</color>
+</resources>

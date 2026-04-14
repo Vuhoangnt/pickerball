@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.PickerBall" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/brand_blue_light</item>
+        <item name="colorOnPrimaryContainer">@color/on_surface</item>
+        <item name="colorSecondary">@color/brand_orange</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/brand_orange_soft</item>
+        <item name="colorOnSecondaryContainer">#FB923C</item>
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="colorSurface">@color/surface_card</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_muted</item>
+        <item name="colorOutline">@color/outline_soft</item>
+        <item name="android:statusBarColor">@color/surface</item>
+        <item name="android:navigationBarColor">@color/surface_card</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.PickerBall.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.PickerBall.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.PickerBall.Large</item>
+        <item name="materialButtonStyle">@style/Widget.PickerBall.Button</item>
+    </style>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="90dp"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/ivThumb"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:background="@color/outline_soft"
+        android:scaleType="centerCrop" />
+
+    <ImageButton
+        android:id="@+id/btnDelThumb"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_gravity="top|end"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_delete"
+        android:tint="@android:color/holo_red_dark" />
+</FrameLayout>
+

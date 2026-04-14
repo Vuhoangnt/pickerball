@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="ShapeAppearance.PickerBall.Small" parent="ShapeAppearance.Material3.Corner.Small">
+        <item name="cornerSize">10dp</item>
+    </style>
+    <style name="ShapeAppearance.PickerBall.Medium" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">16dp</item>
+    </style>
+    <style name="ShapeAppearance.PickerBall.Large" parent="ShapeAppearance.Material3.Corner.Large">
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="Base.Theme.PickerBall" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/brand_blue_light</item>
+        <item name="colorOnPrimaryContainer">@color/brand_blue_deep</item>
+        <item name="colorSecondary">@color/brand_orange</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/brand_orange_soft</item>
+        <item name="colorOnSecondaryContainer">@color/brand_orange_dark</item>
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="colorSurface">@color/surface_card</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_muted</item>
+        <item name="colorOutline">@color/outline_soft</item>
+        <item name="android:statusBarColor">@color/brand_blue_dark</item>
+        <item name="android:navigationBarColor">@color/surface_card</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.PickerBall.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.PickerBall.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.PickerBall.Large</item>
+        <item name="materialButtonStyle">@style/Widget.PickerBall.Button</item>
+    </style>
+
+    <style name="Theme.PickerBall" parent="Base.Theme.PickerBall" />
+
+    <style name="Theme.PickerBall.Ocean" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_ocean_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_ocean_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_ocean_on_container</item>
+        <item name="android:statusBarColor">@color/theme_ocean_dark</item>
+    </style>
+    <style name="Theme.PickerBall.Forest" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_forest_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_forest_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_forest_on_container</item>
+        <item name="android:statusBarColor">@color/theme_forest_dark</item>
+    </style>
+    <style name="Theme.PickerBall.Sunset" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_sunset_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_sunset_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_sunset_on_container</item>
+        <item name="android:statusBarColor">@color/theme_sunset_dark</item>
+    </style>
+    <style name="Theme.PickerBall.Violet" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_violet_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_violet_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_violet_on_container</item>
+        <item name="android:statusBarColor">@color/theme_violet_dark</item>
+    </style>
+    <style name="Theme.PickerBall.Rose" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_rose_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_rose_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_rose_on_container</item>
+        <item name="android:statusBarColor">@color/theme_rose_dark</item>
+    </style>
+    <style name="Theme.PickerBall.Slate" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_slate_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_slate_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_slate_on_container</item>
+        <item name="android:statusBarColor">@color/theme_slate_dark</item>
+    </style>
+    <style name="Theme.PickerBall.Amber" parent="Base.Theme.PickerBall">
+        <item name="colorPrimary">@color/theme_amber_primary</item>
+        <item name="colorPrimaryContainer">@color/theme_amber_container</item>
+        <item name="colorOnPrimaryContainer">@color/theme_amber_on_container</item>
+        <item name="android:statusBarColor">@color/theme_amber_dark</item>
+    </style>
+
+    <style name="Widget.PickerBall.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">14dp</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.Staff.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+    <style name="TextAppearance.Staff.Toolbar.Subtitle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">#CCFFFFFF</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+</resources>

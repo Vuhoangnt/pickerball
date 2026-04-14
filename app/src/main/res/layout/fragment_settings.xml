@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F6FB"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cài đặt &amp; thông tin"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="4dp"
+            android:text="Ứng dụng quản lý sân Pickleball — dữ liệu lưu cục bộ SQLite.\n\nDùng menu dưới và menu More để truy cập đầy đủ chức năng: sân, khách, đặt sân &amp; hóa đơn, dịch vụ, nhân viên, lịch sử."
+            android:textSize="15sp" />
+    </LinearLayout>
+</ScrollView>

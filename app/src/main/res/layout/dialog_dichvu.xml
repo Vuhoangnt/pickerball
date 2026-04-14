@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/edtDvTen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tên dịch vụ" />
+
+    <EditText
+        android:id="@+id/edtDvGia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Giá"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/edtDvDonVi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Đơn vị (chai, giờ…)" />
+
+    <EditText
+        android:id="@+id/edtDvMoTa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mô tả"
+        android:minLines="2" />
+</LinearLayout>
