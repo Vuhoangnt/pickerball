@@ -55,6 +55,7 @@ public class DichVuPickAdapter extends RecyclerView.Adapter<DichVuPickAdapter.VH
     public void onBindViewHolder(@NonNull VH h, int position) {
         DichVuModel m = list.get(position);
         int maDv = m.getMaDv();
+        h.cb.setOnCheckedChangeListener(null);
         h.cb.setChecked(selected.contains(maDv));
         h.tvTen.setText(m.getTen());
         h.tvMeta.setText(String.format(Locale.getDefault(), "%,.0f đ / %s · %s",
@@ -67,6 +68,8 @@ public class DichVuPickAdapter extends RecyclerView.Adapter<DichVuPickAdapter.VH
             else selected.remove(maDv);
             if (listener != null) listener.onSelectionChanged(getSelectedMaDv());
         });
+
+        h.itemView.setOnClickListener(v -> h.cb.toggle());
     }
 
     @Override

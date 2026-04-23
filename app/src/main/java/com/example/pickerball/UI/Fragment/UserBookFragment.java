@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pickerball.AppConstants;
@@ -44,6 +45,7 @@ import com.example.pickerball.Adapter.DichVuPickAdapter;
 import com.example.pickerball.util.BookingTimeHelper;
 import com.example.pickerball.util.CourtPriceCalculator;
 import com.example.pickerball.util.DateUtils;
+import com.example.pickerball.util.GridSpacingItemDecoration;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -334,7 +336,11 @@ public class UserBookFragment extends Fragment {
                 updatePrice();
             }
         });
-        rvSlotTable.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rvSlotTable.setLayoutManager(new GridLayoutManager(requireContext(), 3));
+        if (rvSlotTable.getItemDecorationCount() == 0) {
+            int gap = (int) (10 * requireContext().getResources().getDisplayMetrics().density);
+            rvSlotTable.addItemDecoration(new GridSpacingItemDecoration(gap, true));
+        }
         rvSlotTable.setAdapter(slotAdapter);
         if (tvSelectedSlotSummary != null) {
             tvSelectedSlotSummary.setText("Đang chọn: chưa có");
@@ -394,7 +400,11 @@ public class UserBookFragment extends Fragment {
             selectedDvMaIds.addAll(selected);
             updatePrice();
         });
-        rvDvPick.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDvPick.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        if (rvDvPick.getItemDecorationCount() == 0) {
+            int gap = (int) (10 * requireContext().getResources().getDisplayMetrics().density);
+            rvDvPick.addItemDecoration(new GridSpacingItemDecoration(gap, true));
+        }
         rvDvPick.setAdapter(dvAdapter);
         updatePrice();
     }

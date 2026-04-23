@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -18,6 +19,7 @@ import com.example.pickerball.DAO.SanAnhDAO;
 import com.example.pickerball.DAO.SanDAO;
 import com.example.pickerball.Model.SanAnhModel;
 import com.example.pickerball.Model.SanModel;
+import com.example.pickerball.util.GridSpacingItemDecoration;
 import com.example.pickerball.util.UiWindowHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -87,7 +89,11 @@ public class UserSanDetailActivity extends AppCompatActivity {
 
         List<CauHinhGiaDAO.GiaTheoKhungRow> bangGia = new CauHinhGiaDAO(this).listChiTietTheoSan(maSan);
         RecyclerView rvGia = findViewById(R.id.rvBangGia);
-        rvGia.setLayoutManager(new LinearLayoutManager(this));
+        rvGia.setLayoutManager(new GridLayoutManager(this, 2));
+        if (rvGia.getItemDecorationCount() == 0) {
+            int gap = (int) (10 * getResources().getDisplayMetrics().density);
+            rvGia.addItemDecoration(new GridSpacingItemDecoration(gap, true));
+        }
         rvGia.setAdapter(new GiaBangAdapter(bangGia));
 
         MaterialButton btn = findViewById(R.id.btnBookThisSan);

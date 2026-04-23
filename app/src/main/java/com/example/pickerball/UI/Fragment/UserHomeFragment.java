@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import com.example.pickerball.UserSanDetailActivity;
 import com.example.pickerball.SessionManager;
 import com.example.pickerball.UserMainActivity;
 import com.example.pickerball.util.HoiVienHelper;
+import com.example.pickerball.util.GridSpacingItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,7 +74,11 @@ public class UserHomeFragment extends Fragment {
         }
 
         RecyclerView rv = v.findViewById(R.id.rvSanBrowse);
-        rv.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rv.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        if (rv.getItemDecorationCount() == 0) {
+            int gap = (int) (12 * requireContext().getResources().getDisplayMetrics().density);
+            rv.addItemDecoration(new GridSpacingItemDecoration(gap, true));
+        }
         List<SanModel> sanList = new SanDAO(requireContext()).getAllForCustomer();
         rv.setAdapter(new SanAdapter(requireContext(), sanList,
                 s1 -> UserSanDetailActivity.start(requireContext(), s1.maSan)));
