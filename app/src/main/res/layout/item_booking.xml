@@ -32,5 +32,17 @@
             android:lineSpacingExtra="2dp"
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelBooking"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="Hủy đặt sân"
+            android:textColor="@color/stat_expense"
+            android:visibility="gone"
+            app:strokeColor="@color/stat_expense" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -18,24 +18,61 @@ import com.example.pickerball.Model.SanModel;
 import com.example.pickerball.R;
 import com.example.pickerball.UI.Dialog.SanDialog;
 import com.example.pickerball.util.SanImageHelper;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 import java.util.Locale;
 
 public class AdminSanAdapter extends RecyclerView.Adapter<AdminSanAdapter.VH> {
 
+    public static class SlotSummary {
+        private final int booked;
+        private final int total;
+        private final boolean hasAny;
+
+        public SlotSummary(int booked, int total, boolean hasAny) {
+            this.booked = booked;
+            this.total = total;
+            this.hasAny = hasAny;
+        }
+
+        public int bookedCount() {
+            return booked;
+        }
+
+        public int totalCount() {
+            return total;
+        }
+
+        public boolean isBooked() {
+            return hasAny;
+        }
+    }
+
+    public interface SlotSummaryProvider {
+        SlotSummary summaryFor(int maSan);
+    }
+
+    public interface Listener {
+        void onSanClicked(SanModel san);
+        void onEditClicked(SanModel san);
+    }
+
     private final Context context;
     private List<SanModel> list;
-    private final Runnable onDataChanged;
+    private final SlotSummaryProvider slotProvider;
     private final SanDialog.GalleryPickHost galleryHost;
+    private final Listener listener;
 
     public AdminSanAdapter(Context context, List<SanModel> list,
+                           SlotSummaryProvider slotProvider,
                            SanDialog.GalleryPickHost galleryHost,
-                           Runnable onDataChanged) {
+                           Listener listener) {
         this.context = context;
         this.list = list;
+        this.slotProvider = slotProvider;
         this.galleryHost = galleryHost;
-        this.onDataChanged = onDataChanged;
+        this.listener = listener;
     }
 
     public void setList(List<SanModel> list) {
@@ -71,12 +108,13 @@ public class AdminSanAdapter extends RecyclerView.Adapter<AdminSanAdapter.VH> {
 
         h.tvTen.setText(s.tenSan);
         h.tvLoai.setText(s.loaiSan != null && !s.loaiSan.isEmpty() ? s.loaiSan : "Pickleball");
+        h.tvGia.setText(String.format(Locale.getDefault(), "%,.0f đ/giờ", s.giaMoiGio));
 
-        String tt = s.trangThai != null ? s.trangThai : "";
-        boolean trong = "TRONG".equalsIgnoreCase(tt);
-        h.tvTrangThai.setText(trong ? "Trống" : ("DA_DAT".equalsIgnoreCase(tt) ? "Đã đặt" : tt));
-        int bg = trong ? Color.parseColor("#DCFCE7") : Color.parseColor("#FEF3C7");
-        int fg = trong ? Color.parseColor("#166534") : Color.parseColor("#B45309");
+        SlotSummary sum = slotProvider != null ? slotProvider.summaryFor(s.maSan) : null;
+        boolean hasBooking = sum != null && sum.isBooked();
+        h.tvTrangThai.setText(hasBooking ? "Có lịch" : "Trống");
+        int bg = hasBooking ? Color.parseColor("#FEF3C7") : Color.parseColor("#DCFCE7");
+        int fg = hasBooking ? Color.parseColor("#B45309") : Color.parseColor("#166534");
         float r = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics());
         GradientDrawable pill = new GradientDrawable();
         pill.setCornerRadius(r);
@@ -88,12 +126,20 @@ public class AdminSanAdapter extends RecyclerView.Adapter<AdminSanAdapter.VH> {
         int pv = (int) (5 * d);
         h.tvTrangThai.setPadding(ph, pv, ph, pv);
 
-        h.tvGia.setText(String.format(Locale.getDefault(), "%,.0f đ/giờ", s.giaMoiGio));
+        if (sum != null && sum.totalCount() > 0) {
+            h.tvSlotCount.setText(String.format(Locale.getDefault(), "%d/%d khung", sum.bookedCount(), sum.totalCount()));
+            h.tvSlotCount.setVisibility(View.VISIBLE);
+        } else {
+            h.tvSlotCount.setVisibility(View.GONE);
+        }
 
-        h.itemView.setOnClickListener(v ->
-                SanDialog.showDialog(context, s, () -> {
-                    if (onDataChanged != null) onDataChanged.run();
-                }, galleryHost));
+        h.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onSanClicked(s);
+        });
+        h.btnEdit.setOnClickListener(v -> {
+            SanDialog.showDialog(context, s, null, galleryHost);
+            if (listener != null) listener.onEditClicked(s);
+        });
     }
 
     @Override
@@ -103,7 +149,8 @@ public class AdminSanAdapter extends RecyclerView.Adapter<AdminSanAdapter.VH> {
 
     static class VH extends RecyclerView.ViewHolder {
         final ImageView img;
-        final TextView tvTen, tvLoai, tvTrangThai, tvGia;
+        final TextView tvTen, tvLoai, tvTrangThai, tvGia, tvSlotCount;
+        final MaterialButton btnEdit;
 
         VH(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +159,8 @@ public class AdminSanAdapter extends RecyclerView.Adapter<AdminSanAdapter.VH> {
             tvLoai = itemView.findViewById(R.id.tvSanAdminLoai);
             tvTrangThai = itemView.findViewById(R.id.tvSanAdminTrangThai);
             tvGia = itemView.findViewById(R.id.tvSanAdminGia);
+            tvSlotCount = itemView.findViewById(R.id.tvSanAdminSlotCount);
+            btnEdit = itemView.findViewById(R.id.btnSanAdminEdit);
         }
     }
 }

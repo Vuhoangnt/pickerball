@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_dashboard"
         android:title="@string/admin_nav_home" />
     <item
+        android:id="@+id/nav_a_bookings"
+        android:icon="@drawable/ic_calendar"
+        android:title="Đặt sân" />
+    <item
         android:id="@+id/nav_a_san"
         android:icon="@drawable/ic_ball"
         android:title="Sân" />
@@ -13,15 +17,7 @@
         android:icon="@drawable/client"
         android:title="Khách" />
     <item
-        android:id="@+id/nav_a_tier"
-        android:icon="@drawable/ic_home"
-        android:title="Hạng" />
-    <item
-        android:id="@+id/nav_a_dv"
-        android:icon="@drawable/ic_menu"
-        android:title="Dịch vụ" />
-    <item
         android:id="@+id/nav_a_stats"
-        android:icon="@drawable/ic_home"
-        android:title="Thống kê" />
+        android:icon="@drawable/ic_more_vert"
+        android:title="Menu" />
 </menu>

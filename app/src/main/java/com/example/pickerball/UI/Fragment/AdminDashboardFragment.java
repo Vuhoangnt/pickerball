@@ -56,42 +56,50 @@ public class AdminDashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        period = 0;
+        try {
+            period = 0;
 
-        edtPoints = v.findViewById(R.id.edtDashPoints);
-        tvRangeHint = v.findViewById(R.id.tvDashRangeHint);
-        tvTongPhieu = v.findViewById(R.id.tvDashTongPhieu);
-        tvTongDuKien = v.findViewById(R.id.tvDashTongDuKien);
-        tvDoanhThu = v.findViewById(R.id.tvDashDoanhThu);
-        tvHdTt = v.findViewById(R.id.tvDashHdTt);
-        tvSanKhach = v.findViewById(R.id.tvDashSanKhach);
-        tvChartCaption = v.findViewById(R.id.tvDashChartCaption);
-        tvDashTrangThai = v.findViewById(R.id.tvDashTrangThai);
-        tvDashHinhThuc = v.findViewById(R.id.tvDashHinhThuc);
-        chartBar = v.findViewById(R.id.chartDashBar);
-        chipDay = v.findViewById(R.id.chipDashDay);
-        chipMonth = v.findViewById(R.id.chipDashMonth);
-        chipYear = v.findViewById(R.id.chipDashYear);
-        MaterialButton btnSave = v.findViewById(R.id.btnDashSaveCfg);
+            edtPoints = v.findViewById(R.id.edtDashPoints);
+            tvRangeHint = v.findViewById(R.id.tvDashRangeHint);
+            tvTongPhieu = v.findViewById(R.id.tvDashTongPhieu);
+            tvTongDuKien = v.findViewById(R.id.tvDashTongDuKien);
+            tvDoanhThu = v.findViewById(R.id.tvDashDoanhThu);
+            tvHdTt = v.findViewById(R.id.tvDashHdTt);
+            tvSanKhach = v.findViewById(R.id.tvDashSanKhach);
+            tvChartCaption = v.findViewById(R.id.tvDashChartCaption);
+            tvDashTrangThai = v.findViewById(R.id.tvDashTrangThai);
+            tvDashHinhThuc = v.findViewById(R.id.tvDashHinhThuc);
+            chartBar = v.findViewById(R.id.chartDashBar);
+            chipDay = v.findViewById(R.id.chipDashDay);
+            chipMonth = v.findViewById(R.id.chipDashMonth);
+            chipYear = v.findViewById(R.id.chipDashYear);
+            MaterialButton btnSave = v.findViewById(R.id.btnDashSaveCfg);
 
-        HeThongDAO he = new HeThongDAO(requireContext());
-        edtPoints.setText(String.valueOf(he.getInt(K_DIEM_DAT, 5)));
+            if (edtPoints != null) {
+                HeThongDAO he = new HeThongDAO(requireContext());
+                edtPoints.setText(String.valueOf(he.getInt(K_DIEM_DAT, 5)));
+                if (btnSave != null) btnSave.setOnClickListener(x -> savePoints(he));
+            }
 
-        btnSave.setOnClickListener(x -> savePoints(he));
+            View.OnClickListener chipListener = x -> {
+                int id = x.getId();
+                if (id == R.id.chipDashDay) period = 0;
+                else if (id == R.id.chipDashMonth) period = 1;
+                else period = 2;
+                reload();
+            };
+            if (chipDay != null) chipDay.setOnClickListener(chipListener);
+            if (chipMonth != null) chipMonth.setOnClickListener(chipListener);
+            if (chipYear != null) chipYear.setOnClickListener(chipListener);
 
-        View.OnClickListener chipListener = x -> {
-            int id = x.getId();
-            if (id == R.id.chipDashDay) period = 0;
-            else if (id == R.id.chipDashMonth) period = 1;
-            else period = 2;
+            if (chartBar != null) styleChart(chartBar);
             reload();
-        };
-        chipDay.setOnClickListener(chipListener);
-        chipMonth.setOnClickListener(chipListener);
-        chipYear.setOnClickListener(chipListener);
-
-        styleChart(chartBar);
-        reload();
+        } catch (Exception e) {
+            android.util.Log.e("AdminDash", "onViewCreated crash", e);
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "Lỗi tải dashboard: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void savePoints(HeThongDAO he) {
@@ -112,6 +120,16 @@ public class AdminDashboardFragment extends Fragment {
     }
 
     private void reload() {
+        if (getContext() == null) return;
+        try {
+            doReload();
+        } catch (Exception e) {
+            android.util.Log.e("AdminDash", "reload crash", e);
+            Toast.makeText(getContext(), "Lỗi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void doReload() {
         ThongKeDAO dao = new ThongKeDAO(requireContext());
         Calendar now = Calendar.getInstance();
         String tuNgay;
@@ -216,19 +234,24 @@ public class AdminDashboardFragment extends Fragment {
             labels.add("—");
         }
 
-        BarDataSet ds = new BarDataSet(be, getString(R.string.admin_dash_chart_legend_phieu));
-        ds.setColor(Color.parseColor("#1877F2"));
-        ds.setValueTextSize(9f);
-        BarData bd = new BarData(ds);
-        bd.setBarWidth(period == 2 ? 0.45f : 0.65f);
-        chartBar.setData(bd);
-        chartBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
-        chartBar.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        chartBar.getXAxis().setGranularity(1f);
-        chartBar.getXAxis().setLabelRotationAngle(period == 1 ? -45f : 0f);
-        chartBar.getDescription().setEnabled(false);
-        chartBar.getLegend().setEnabled(false);
-        chartBar.invalidate();
+        if (chartBar == null) return;
+        try {
+            BarDataSet ds = new BarDataSet(be, getString(R.string.admin_dash_chart_legend_phieu));
+            ds.setColor(Color.parseColor("#1877F2"));
+            ds.setValueTextSize(9f);
+            BarData bd = new BarData(ds);
+            bd.setBarWidth(period == 2 ? 0.45f : 0.65f);
+            chartBar.setData(bd);
+            chartBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+            chartBar.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+            chartBar.getXAxis().setGranularity(1f);
+            chartBar.getXAxis().setLabelRotationAngle(period == 1 ? -45f : 0f);
+            chartBar.getDescription().setEnabled(false);
+            chartBar.getLegend().setEnabled(false);
+            chartBar.invalidate();
+        } catch (Exception e) {
+            android.util.Log.e("AdminDash", "chart crash", e);
+        }
     }
 
     private static String shortDayLabel(String yyyyMmDd) {

@@ -108,21 +108,27 @@ public class DatSanDAO {
         public String gioBd;
         public String gioKt;
         public String trangThai;
+        public String tenKh;
+        public int maDatSan;
     }
 
     /** Các khung giờ đã có lịch (trừ Hủy/Từ chối) theo sân + ngày. */
     public List<BookedRange> listBookedRanges(int maSan, String ngayDat) {
         List<BookedRange> list = new ArrayList<>();
         Cursor c = db.rawQuery(
-                "SELECT thoi_gian_bat_dau, thoi_gian_ket_thuc, trang_thai "
-                        + "FROM dat_san WHERE ma_san=? AND ngay_dat=? AND trang_thai NOT IN (?, ?) "
-                        + "ORDER BY thoi_gian_bat_dau ASC",
+                "SELECT d.thoi_gian_bat_dau, d.thoi_gian_ket_thuc, d.trang_thai, "
+                        + "IFNULL(k.ho_ten, ''), d.ma_dat_san "
+                        + "FROM dat_san d LEFT JOIN khach_hang k ON k.ma_kh = d.ma_kh "
+                        + "WHERE d.ma_san=? AND d.ngay_dat=? AND d.trang_thai NOT IN (?, ?) "
+                        + "ORDER BY d.thoi_gian_bat_dau ASC",
                 new String[]{String.valueOf(maSan), ngayDat, AppConstants.DS_HUY, AppConstants.DS_TU_CHOI});
         while (c.moveToNext()) {
             BookedRange row = new BookedRange();
             row.gioBd = c.getString(0);
             row.gioKt = c.getString(1);
             row.trangThai = c.getString(2);
+            row.tenKh = c.getString(3);
+            row.maDatSan = c.getInt(4);
             list.add(row);
         }
         c.close();
@@ -271,6 +277,58 @@ public class DatSanDAO {
         if (c.moveToFirst()) n = c.getInt(0);
         c.close();
         return n;
+    }
+
+    /** Dòng đặt sân cho admin (dùng cho duyệt/từ chối). */
+    public static class AdminBookingRow {
+        public int maDatSan;
+        public int maSan;
+        public int maKh;
+        public String ngayDat;
+        public String gioBd;
+        public String gioKt;
+        public String trangThai;
+        public String tenSan;
+        public String tenKh;
+        public String sdtKh;
+        public String emailKh;
+        public double tongDuKien;
+        public String hinhThuc;
+        public String ghiChu;
+    }
+
+    /** Lấy tất cả đặt sân (chờ duyệt + đã duyệt) cho admin. */
+    public List<AdminBookingRow> listAllForAdmin() {
+        List<AdminBookingRow> list = new ArrayList<>();
+        Cursor c = db.rawQuery(
+                "SELECT d.ma_dat_san, d.ma_san, d.ma_kh, d.ngay_dat, d.thoi_gian_bat_dau, d.thoi_gian_ket_thuc, d.trang_thai, "
+                        + "IFNULL(s.ten_san,''), IFNULL(k.ho_ten,''), IFNULL(k.so_dien_thoai,''), IFNULL(k.email,''), "
+                        + "d.tong_du_kien, IFNULL(d.hinh_thuc,''), IFNULL(d.ghi_chu,'') "
+                        + "FROM dat_san d "
+                        + "LEFT JOIN san s ON s.ma_san = d.ma_san "
+                        + "LEFT JOIN khach_hang k ON k.ma_kh = d.ma_kh "
+                        + "ORDER BY d.trang_thai='CHO_DUYET' DESC, d.created_at_ms DESC",
+                null);
+        while (c.moveToNext()) {
+            AdminBookingRow r = new AdminBookingRow();
+            r.maDatSan = c.getInt(0);
+            r.maSan = c.getInt(1);
+            r.maKh = c.getInt(2);
+            r.ngayDat = c.getString(3);
+            r.gioBd = c.getString(4);
+            r.gioKt = c.getString(5);
+            r.trangThai = c.getString(6);
+            r.tenSan = c.getString(7);
+            r.tenKh = c.getString(8);
+            r.sdtKh = c.getString(9);
+            r.emailKh = c.getString(10);
+            r.tongDuKien = c.getDouble(11);
+            r.hinhThuc = c.getString(12);
+            r.ghiChu = c.getString(13);
+            list.add(r);
+        }
+        c.close();
+        return list;
     }
 
     public List<DatSanListItem> getAllWithNames() {

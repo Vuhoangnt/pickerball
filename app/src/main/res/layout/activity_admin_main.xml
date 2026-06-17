@@ -55,7 +55,8 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/bg_nav_bar_rounded_top"
         android:elevation="10dp"
-        android:paddingTop="4dp"
         app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
         app:menu="@menu/menu_admin" />
 </LinearLayout>

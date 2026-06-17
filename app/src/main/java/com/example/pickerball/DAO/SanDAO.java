@@ -65,6 +65,17 @@ public class SanDAO {
         return t;
     }
 
+    public static String getTenSanStatic(Context context, int maSan) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT ten_san FROM san WHERE ma_san=?", new String[]{String.valueOf(maSan)});
+        String t = null;
+        if (c.moveToFirst()) t = c.getString(0);
+        c.close();
+        dbHelper.close();
+        return t;
+    }
+
     public void insert(SanModel s) {
         ContentValues v = new ContentValues();
         v.put("ten_san", s.tenSan);

@@ -153,10 +153,13 @@ public class UserBookFragment extends Fragment {
                 cal.set(y, m, d);
                 ngayDat = String.format(Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d);
                 tvDate.setText("Ngày: " + ngayDat);
+                ensureStartNotInPast();
                 refreshBookedSlots();
                 refreshSlotTable();
+                updateTimeLabels();
                 updatePrice();
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            dp.getDatePicker().setMinDate(System.currentTimeMillis() - 1000L);
             dp.show();
         });
 
@@ -170,6 +173,9 @@ public class UserBookFragment extends Fragment {
 
         if (!sanList.isEmpty()) {
             onSanChanged();
+            ensureStartNotInPast();
+            updateTimeLabels();
+            updatePrice();
         }
     }
 
@@ -199,6 +205,57 @@ public class UserBookFragment extends Fragment {
         gioKetThuc = BookingTimeHelper.normalizeHhMm(String.format(Locale.US, "%02d:%02d", end / 60, end % 60));
     }
 
+    /**
+     * Nếu ngày đang xem là hôm nay và giờ bắt đầu <= hiện tại, đẩy giờ bắt đầu
+     * lên khung kế tiếp (làm tròn lên đầu giờ sau) để khung luôn ở tương lai.
+     */
+    private void ensureStartNotInPast() {
+        if (ngayDat == null) return;
+        if (BookingTimeHelper.compareToToday(ngayDat) != 0) return;
+        if (sanList == null || sanList.isEmpty() || spinnerSan == null) return;
+        int pos = spinnerSan.getSelectedItemPosition();
+        if (pos < 0) return;
+        SanModel san = sanList.get(pos);
+        String mo = san.gioMoCua != null ? san.gioMoCua : "06:00";
+        String cl = san.gioDongCua != null ? san.gioDongCua : "22:00";
+        int oMin = DateUtils.toMinutes(mo);
+        int cMin = DateUtils.toMinutes(cl);
+        if (oMin < 0 || cMin <= oMin) return;
+        Calendar now = Calendar.getInstance();
+        int nowMin = now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE);
+        if (gioBatDau == null || gioKetThuc == null) {
+            int start = Math.max(oMin, nowMin + 30);
+            start = ((start + 59) / 60) * 60;
+            if (start + 60 > cMin) {
+                gioBatDau = null;
+                gioKetThuc = null;
+                return;
+            }
+            gioBatDau = String.format(Locale.US, "%02d:%02d", start / 60, start % 60);
+            gioKetThuc = String.format(Locale.US, "%02d:%02d", (start + 60) / 60, (start + 60) % 60);
+            return;
+        }
+        int startMin = DateUtils.toMinutes(gioBatDau);
+        int endMin = DateUtils.toMinutes(gioKetThuc);
+        if (startMin < 0 || endMin <= startMin) return;
+        if (startMin > nowMin) return;
+        int duration = endMin - startMin;
+        int newStart = ((nowMin + 30) / 60) * 60;
+        if (newStart < oMin) newStart = oMin;
+        int newEnd = newStart + duration;
+        if (newEnd > cMin) {
+            newStart = cMin - duration;
+            newEnd = cMin;
+        }
+        if (newStart <= nowMin || newStart < oMin || newEnd > cMin) {
+            gioBatDau = null;
+            gioKetThuc = null;
+            return;
+        }
+        gioBatDau = String.format(Locale.US, "%02d:%02d", newStart / 60, newStart % 60);
+        gioKetThuc = String.format(Locale.US, "%02d:%02d", newEnd / 60, newEnd % 60);
+    }
+
     private void showTimePicker(boolean start) {
         int h = 8;
         int mi = 0;
@@ -226,10 +283,22 @@ public class UserBookFragment extends Fragment {
                     Toast.makeText(getContext(), "Khung giờ này đã có lịch, vui lòng chọn giờ khác", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (BookingTimeHelper.isStartInPast(ngayDat, normalized)) {
+                    Toast.makeText(getContext(),
+                            "Giờ bắt đầu phải ở tương lai. Vui lòng chọn giờ khác.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 gioBatDau = normalized;
             } else {
                 if (isSelectionBlocked(gioBatDau, normalized)) {
                     Toast.makeText(getContext(), "Khung giờ này đã có lịch, vui lòng chọn giờ khác", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (BookingTimeHelper.isStartInPast(ngayDat, gioBatDau)) {
+                    Toast.makeText(getContext(),
+                            "Giờ bắt đầu đang ở quá khứ, hãy chọn lại.",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
                 gioKetThuc = normalized;
@@ -289,12 +358,29 @@ public class UserBookFragment extends Fragment {
             return;
         }
 
+        int cmpToday = BookingTimeHelper.compareToToday(ngayDat);
+        int nowMin = -1;
+        if (cmpToday == 0) {
+            Calendar now = Calendar.getInstance();
+            nowMin = now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE);
+        }
+
         for (int t = openMin; t + 60 <= closeMin; t += 60) {
+            if (cmpToday == 0 && t <= nowMin) continue;
+            if (cmpToday < 0) break;
             KhungGioModel k = new KhungGioModel();
             int end = t + 60;
             k.gioBatDau = String.format(Locale.US, "%02d:%02d", t / 60, t % 60);
             k.gioKetThuc = String.format(Locale.US, "%02d:%02d", end / 60, end % 60);
             slotBlocks.add(k);
+        }
+
+        if (slotBlocks.isEmpty()) {
+            rvSlotTable.setAdapter(null);
+            if (tvBookedSlots != null) {
+                tvBookedSlots.setText("Ngày này đã qua hoặc sân chưa có khung giờ tương lai.");
+            }
+            return;
         }
 
         boolean[] available = new boolean[slotBlocks.size()];
@@ -323,8 +409,24 @@ public class UserBookFragment extends Fragment {
                 if (e >= 0 && e > max) max = e;
             }
             if (min >= 0 && max > min) {
-                gioBatDau = String.format(Locale.US, "%02d:%02d", min / 60, min % 60);
-                gioKetThuc = String.format(Locale.US, "%02d:%02d", max / 60, max % 60);
+                String bd = String.format(Locale.US, "%02d:%02d", min / 60, min % 60);
+                String kt = String.format(Locale.US, "%02d:%02d", max / 60, max % 60);
+                if (BookingTimeHelper.isStartInPast(ngayDat, bd)) {
+                    Toast.makeText(getContext(),
+                            "Khung bắt đầu đã ở quá khứ, vui lòng chọn khung khác",
+                            Toast.LENGTH_SHORT).show();
+                    slotAdapter.clearSelection();
+                    gioBatDau = null;
+                    gioKetThuc = null;
+                    if (tvSelectedSlotSummary != null) {
+                        tvSelectedSlotSummary.setText("Đang chọn: chưa có");
+                    }
+                    updateTimeLabels();
+                    updatePrice();
+                    return;
+                }
+                gioBatDau = bd;
+                gioKetThuc = kt;
                 if (tvSelectedSlotSummary != null) {
                     tvSelectedSlotSummary.setText(String.format(
                             Locale.getDefault(),
@@ -388,6 +490,9 @@ public class UserBookFragment extends Fragment {
                 }
             }
         }
+        ensureStartNotInPast();
+        updateTimeLabels();
+        updatePrice();
     }
 
     private void loadAllDichVuPickList() {
@@ -500,6 +605,13 @@ public class UserBookFragment extends Fragment {
         if (durMin < BookingTimeHelper.MIN_BOOKING_MINUTES) {
             Toast.makeText(getContext(),
                     "Thời lượng tối thiểu " + BookingTimeHelper.MIN_BOOKING_MINUTES + " phút",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (BookingTimeHelper.isStartInPast(ngayDat, gioBatDau)) {
+            Toast.makeText(getContext(),
+                    "Không thể đặt lịch ở quá khứ. Vui lòng chọn ngày/giờ tương lai.",
                     Toast.LENGTH_LONG).show();
             return;
         }

@@ -29,17 +29,23 @@ public final class UiWindowHelper {
     }
 
     public static void install(Activity activity) {
-        WindowCompat.setDecorFitsSystemWindows(activity.getWindow(), false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsController c = activity.getWindow().getInsetsController();
-            if (c != null) {
-                c.setSystemBarsAppearance(
-                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+        try {
+            WindowCompat.setDecorFitsSystemWindows(activity.getWindow(), false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController c = activity.getWindow().getInsetsController();
+                if (c != null) {
+                    c.setSystemBarsAppearance(
+                            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+                }
+            } else {
+                //noinspection deprecation
+                activity.getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             }
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        } catch (Exception e) {
+            android.util.Log.e("UiWindowHelper", "install error", e);
         }
-        activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-        activity.getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 }
